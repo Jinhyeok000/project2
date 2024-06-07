@@ -19,6 +19,10 @@
         	border: 1px solid black;
         }
         
+        #movieContainer{
+        	border-top : 0;
+        }
+        
         .header div {
             font-size: 1.5rem;
             display: flex;
@@ -55,38 +59,111 @@
             <div class="col-2 dateCol">개봉일</div>
             <div class="col-2">비고</div>
         </div>
-        <div class="row eachRow">
-            <div class="col-2 seqCol">1</div>
-            <div class="col-4 titleCol">
-                <div class="title">범죄도시</div>
-                <input type="hidden" class="corTitleInput" placeholder="수정할 제목">
-            </div>
-            <div class="col-2 genreCol">
-                <div class="genre">공포</div>
-                <input type="hidden" class="corGenreInput" placeholder="수정할 장르">
-            </div>
-            <div class="col-2 dateCol">
-                <div class="date">2024.06.02</div>
-                <input type="hidden" class="corDateInput" placeholder="yyyy.mm.dd">
-            </div>
-            <div class="col-2 btnCol">
-                <button type="button" class="btn btn-outline-success corBtn">수정</button>
-                <button type="button" class="btn btn-outline-danger delBtn">삭제</button>
-            </div>
-        </div>
+    </div>
+    <div class="container" id="movieContainer">
+    	
     </div>
 
     <script>
+	    function getReples(){
+			$.ajax({
+				url : "/output.movies",
+				dataType:"json",
+			}).done(function(resp){
+				if(resp.length != 0){
+					function formatDate(timestamp) {
+		                let date = new Date(timestamp);
+		                let year = date.getFullYear().toString().slice(2);
+		                let month = ('0' + (date.getMonth() + 1)).slice(-2);
+		                let day = ('0' + date.getDate()).slice(-2);
+		                let hours = ('0' + date.getHours()).slice(-2);
+		                let minutes = ('0' + date.getMinutes()).slice(-2);
+		                return year + "." + month + "." + day + " " + hours+ ":" + minutes;
+		            }
+			
+			$("#movieContainer").html("");
+			resp.forEach(function(dto) {
+				let formattedDate = formatDate(dto.open_date);
+			                
+				let rowDiv = document.createElement('div');
+	            rowDiv.classList.add('row', 'eachRow');
+
+	            let seqColDiv = document.createElement('div');
+	            seqColDiv.classList.add('col-2', 'seqCol');
+	            seqColDiv.textContent = dto.seq;
+
+	            let titleColDiv = document.createElement('div');
+	            titleColDiv.classList.add('col-4', 'titleCol');
+
+	            let titleDiv = document.createElement('div');
+	            titleDiv.classList.add('title');
+	            titleDiv.textContent = dto.title;
+
+	            let titleInput = document.createElement('input');
+	            titleInput.type = 'hidden';
+	            titleInput.classList.add('corTitleInput');
+	            titleInput.placeholder = '수정할 제목';
+
+	            let genreColDiv = document.createElement('div');
+	            genreColDiv.classList.add('col-2', 'genreCol');
+
+	            let genreDiv = document.createElement('div');
+	            genreDiv.classList.add('genre');
+	            genreDiv.textContent = dto.genre;
+
+	            let genreInput = document.createElement('input');
+	            genreInput.type = 'hidden';
+	            genreInput.classList.add('corGenreInput');
+	            genreInput.placeholder = '수정할 장르';
+
+	            let dateColDiv = document.createElement('div');
+	            dateColDiv.classList.add('col-2', 'dateCol');
+
+	            let dateDiv = document.createElement('div');
+	            dateDiv.classList.add('date');
+	            dateDiv.textContent = formattedDate;
+
+	            let dateInput = document.createElement('input');
+	            dateInput.type = 'hidden';
+	            dateInput.classList.add('corDateInput');
+	            dateInput.placeholder = 'yyyy.mm.dd';
+
+	            let btnColDiv = document.createElement('div');
+	            btnColDiv.classList.add('col-2', 'btnCol');
+
+	            let editButton = document.createElement('button');
+	            editButton.type = 'button';
+	            editButton.classList.add('btn', 'btn-outline-success', 'corBtn');
+	            editButton.textContent = '수정';
+
+	            let deleteButton = document.createElement('button');
+	            deleteButton.type = 'button';
+	            deleteButton.classList.add('btn', 'btn-outline-danger', 'delBtn');
+	            deleteButton.textContent = '삭제';
+
+	            titleColDiv.append(titleDiv, titleInput);
+	            genreColDiv.append(genreDiv, genreInput);
+	            dateColDiv.append(dateDiv, dateInput);
+	            btnColDiv.append(editButton, deleteButton);
+
+	            rowDiv.append(seqColDiv, titleColDiv, genreColDiv, dateColDiv, btnColDiv);
+
+	            $("#movieContainer").append(rowDiv);
+				 });
+				}
+			});
+		}
+	    
+	    $(getReples());
+    
         $(".container").on("click", ".delBtn", function () {
             let isDel = confirm("정말 삭제하시겠습니까?");
             if (isDel) {
                 $.ajax({
-                    url: "/deleteMovie.movies",
+                    url: "/delete.movies",
                     data: {
                         seq: $(this).closest(".eachRow").find(".seqCol").text()
                     }
-                }).done(function () {
-                    
                 });
             }
             $(this).closest(".eachRow").remove();
@@ -105,8 +182,6 @@
             $(this).closest(".eachRow").find(".corTitleInput").attr("type", "text");
             $(this).closest(".eachRow").find(".corGenreInput").attr("type", "text");
             $(this).closest(".eachRow").find(".corDateInput").attr("type", "text");
-
-
         });
 
         $(".container").on("click", ".corNoBtn", function (){
@@ -134,7 +209,8 @@
                         date: $(this).closest(".eachRow").find(".corDateInput").val()
                     }
                 }).done(function() {
-                    
+                	$("#movieContainer").html();
+                	getReples();
                 });
         });
     </script>
