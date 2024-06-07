@@ -43,6 +43,17 @@ public class MoviesDAO {
 			return ps.executeUpdate();
 		}
 	}
+	// 삭제하기 delete
+	public int delete(int seq) throws Exception{
+		   String sql = "delete from movies where seq=?";
+		   try(Connection con = this.getConnection();
+				   PreparedStatement pstat = con.prepareStatement(sql)){
+			   pstat.setInt(1, seq);
+			   int result = pstat.executeUpdate();
+			   
+			   return result;
+		   }
+	}
 
 	//2. 전체 출력 select
 	public ArrayList<MoviesDTO> selectAll() throws Exception{

@@ -39,8 +39,11 @@ public class MoviesController extends HttpServlet {
 				ArrayList<MoviesDTO> movieslist=moviedao.selectAll();
 				PrintWriter pw=response.getWriter();
 				pw.append(g.toJson(movieslist));
+			} else if(cmd.equals("/delete.movies")) {
+				int seq = Integer.parseInt(request.getParameter("seq"));
+				moviedao.delete(seq);
+				
 			}
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("/error.jsp");
