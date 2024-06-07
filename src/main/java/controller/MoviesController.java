@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import dao.MoviesDAO;
 import dto.MoviesDTO;
@@ -28,20 +28,28 @@ public class MoviesController extends HttpServlet {
 		String cmd=request.getRequestURI();
 		System.out.println(cmd);
 		
-		MoviesDAO moviedao=MoviesDAO.getInstance();
+		MoviesDAO moviesdao=MoviesDAO.getInstance();
 		
 		try {
 			if(cmd.equals("/input.movies")) {
 				String title=request.getParameter("title");
 				String genre=request.getParameter("genre");
-				moviedao.insert(new MoviesDTO(0,title,genre,null));
+				moviesdao.insert(new MoviesDTO(0,title,genre,null));
 			}else if(cmd.equals("/output.movies")) {
-				ArrayList<MoviesDTO> movieslist=moviedao.selectAll();
+				ArrayList<MoviesDTO> movieslist=moviesdao.selectAll();
 				PrintWriter pw=response.getWriter();
 				pw.append(g.toJson(movieslist));
+				
 			} else if(cmd.equals("/delete.movies")) {
 				int seq = Integer.parseInt(request.getParameter("seq"));
-				moviedao.delete(seq);
+				moviesdao.delete(seq);
+				
+			}else if(cmd.equals("/update.movies")) {
+				int seq=Integer.parseInt(request.getParameter("seq")) ;
+				String title=request.getParameter("title");
+				String genre=request.getParameter("genre");
+				String open_date=request.getParameter("date");
+				moviesdao.updateBySeq(seq, title, genre, open_date);	
 				
 			}
 		}catch(Exception e) {
