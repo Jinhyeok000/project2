@@ -176,6 +176,8 @@
                         seq: $(this).closest(".eachRow").find(".seqCol").text()
                     }
                 });
+            }else{
+            	return;
             }
             $(this).closest(".eachRow").remove();
         });
