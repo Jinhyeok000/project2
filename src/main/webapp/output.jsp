@@ -214,7 +214,7 @@
 
         $(".container").on("click", ".corYesBtn", function (){
             $.ajax({
-                    url: "/corMovie.movies",
+                    url: "/update.movies",
                     data: {
                         seq: $(this).closest(".eachRow").find(".seqCol").text(),
                         title: $(this).closest(".eachRow").find(".corTitleInput").val(),
