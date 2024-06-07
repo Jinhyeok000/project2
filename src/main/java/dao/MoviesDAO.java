@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.naming.Context;
@@ -43,7 +44,7 @@ public class MoviesDAO {
 			return ps.executeUpdate();
 		}
 	}
-	// 삭제하기 delete
+	//2. 삭제하기 delete
 	public int delete(int seq) throws Exception{
 		   String sql = "delete from movies where seq=?";
 		   try(Connection con = this.getConnection();
@@ -55,7 +56,7 @@ public class MoviesDAO {
 		   }
 	}
 
-	//2. 전체 출력 select
+	//3. 전체 출력 select
 	public ArrayList<MoviesDTO> selectAll() throws Exception{
 		String sql="select * from movies order by 1";
 
@@ -74,6 +75,32 @@ public class MoviesDAO {
 			}
 			return list;
 		}
+	}
+	
+	public static String ts2Str(Timestamp ts) {
+		   SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd");
+		   return sdf.format(ts);
+	}
+	
+	public static Timestamp str2Ts(String strTime) throws Exception{
+		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+		   Timestamp ymdTs = new Timestamp(sdf.parse(strTime).getTime());
+		   return ymdTs;
+	}
+	
+	//5. update
+	public int updateBySeq(int targetseq, String updatetitle, String updategenre, String updateopen_date) throws Exception{
+			String sql="update movies set title=?, genre=?, open_date=? where seq=? ";
+			Timestamp tsupdateopen_date= str2Ts(updateopen_date);
+
+			try(Connection con=this.getConnection();
+					PreparedStatement ps=con.prepareStatement(sql);){
+				ps.setString(1, updatetitle);
+				ps.setString(2, updategenre);
+				ps.setTimestamp(3, tsupdateopen_date);
+				ps.setInt(4, targetseq);
+				return ps.executeUpdate();
+			}
 	}
 
 }
