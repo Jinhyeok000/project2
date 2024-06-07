@@ -26,7 +26,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-	<form action="input.movie" method="post">
+	<form action="/input.movies" method="post">
 	    <div class="container">
         <input type="text" placeholder="영화제목" name="title"><br>
         <input type="text" placeholder="장르" name="genre"><br>
