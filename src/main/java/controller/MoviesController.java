@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import dao.MoviesDAO;
 import dto.MoviesDTO;
@@ -33,10 +35,15 @@ public class MoviesController extends HttpServlet {
 				String title=request.getParameter("title");
 				String genre=request.getParameter("genre");
 				moviedao.insert(new MoviesDTO(0,title,genre,null));
+			}else if(cmd.equals("/output.movies")) {
+				ArrayList<MoviesDTO> movieslist=moviedao.selectAll();
+				PrintWriter pw=response.getWriter();
+				pw.append(g.toJson(movieslist));
 			}
 			
 		}catch(Exception e) {
 			e.printStackTrace();
+			response.sendRedirect("/error.jsp");
 		}
 	}
 

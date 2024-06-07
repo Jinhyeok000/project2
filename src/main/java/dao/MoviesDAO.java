@@ -2,6 +2,9 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -38,6 +41,27 @@ public class MoviesDAO {
 			ps.setString(1, dto.getTitle());
 			ps.setString(2, dto.getGenre());
 			return ps.executeUpdate();
+		}
+	}
+
+	//2. 전체 출력 select
+	public ArrayList<MoviesDTO> selectAll() throws Exception{
+		String sql="select * from movies order by 1";
+
+		try(Connection con=this.getConnection();
+				PreparedStatement ps=con.prepareStatement(sql);
+				ResultSet rs=ps.executeQuery();){
+			ArrayList<MoviesDTO> list=new ArrayList<MoviesDTO>();
+			while(rs.next()){
+				int seq=rs.getInt(1);
+				String title=rs.getString(2);
+				String genre=rs.getString(3);
+				Timestamp open_date=rs.getTimestamp(4);
+
+				list.add(new MoviesDTO(seq, title, genre, open_date));
+
+			}
+			return list;
 		}
 	}
 
