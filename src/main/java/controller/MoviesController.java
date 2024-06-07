@@ -33,8 +33,11 @@ public class MoviesController extends HttpServlet {
 				String title=request.getParameter("title");
 				String genre=request.getParameter("genre");
 				moviedao.insert(new MoviesDTO(0,title,genre,null));
+			} else if(cmd.equals("/delete.movies")) {
+				int seq = Integer.parseInt(request.getParameter("seq"));
+				moviedao.delete(seq);
+				
 			}
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
