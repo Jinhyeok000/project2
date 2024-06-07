@@ -53,7 +53,7 @@
         		<div class="title">Index</div>
         		<div class="contents">
             		<div class="input"><button onclick="movePath('/inputform.jsp')">toInput</button></div>
-            		<div class="output"><button onclick="movePath('/output.movies')">toOutput</button></div>
+            		<div class="output"><button onclick="movePath('/output.jsp')">toOutput</button></div>
         		</div>
     		</div>
 </body>
