@@ -8,19 +8,16 @@ public class MoviesDTO {
 	private String genre;
 	private Timestamp open_date;
 	
-	MoviesDTO(){
-		
+	public MoviesDTO() {
 	}
 	
-	MoviesDTO(int seq, String title, String genre, Timestamp open_date){
-		this.seq=seq;
-		this.title=title;
-		this.genre=genre;
-		this.open_date=open_date;
-		
+	public MoviesDTO(int seq, String title, String genre, Timestamp open_date) {
+		super();
+		this.seq = seq;
+		this.title = title;
+		this.genre = genre;
+		this.open_date = open_date;
 	}
-	
-	
 	public int getSeq() {
 		return seq;
 	}
