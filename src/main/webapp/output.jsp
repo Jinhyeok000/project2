@@ -23,6 +23,11 @@
         	border-top : 0;
         }
         
+        #btnContainer{
+        	margin-top : 10px;
+        	border : 0;
+        }
+        
         .header div {
             font-size: 1.5rem;
             display: flex;
@@ -40,7 +45,8 @@
         }
 
         .eachRow .btnCol {
-            justify-content: space-evenly
+            justify-content: space-evenly;
+            padding : 5px;
         }
 
         .eachRow input{
@@ -63,8 +69,15 @@
     <div class="container" id="movieContainer">
     	
     </div>
+    <div class="container" id="btnContainer">
+    	<button type="button" id="back" class="btn btn-outline-dark">돌아가기</button>
+    </div>
 
     <script>
+    	$("#back").on("click", function(){
+    		location.href = "/index.jsp"
+    	});
+    
 	    function getReples(){
 			$.ajax({
 				url : "/output.movies",
